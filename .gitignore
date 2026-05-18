@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.env
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+*.zip
+
+# temp / local only
+_cell*.txt
+_guide_text.txt
+submission (1)*.csv
+the-innovators (1).ipynb
+Hackathon_Guide*.pdf
+silent_gap_kaggle_outputs/
+
+# keep organized copies under repo paths only
+!.gitkeep
