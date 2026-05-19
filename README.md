@@ -1,116 +1,62 @@
-# The Innovators — The Silent Gap (ASL Sign Language)
-
-**Forman Computer Science Club · AI Hackathon 2026**
-
-Team **The Innovators** — 29-class ASL hand-sign classifier (A–Z, `space`, `del`, `nothing`) with a **live webcam demo** and **word-spelling interface** for Phase 2.
-
-Repository: [github.com/zk-007/the_innovators](https://github.com/zk-007/the_innovators)
-
+---
+title: The Innovators — ASL Live Demo
+emoji: 🤟
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: 4.44.1
+app_file: app.py
+pinned: true
+license: mit
+short_description: Live ASL sign language → text (webcam + spelling)
 ---
 
-## Phase 1 — Model training (Kaggle)
+# The Innovators — The Silent Gap
 
-| Item | Detail |
-|------|--------|
-| Model | `convnext_tiny.fb_in22k_ft_in1k` (timm) |
-| Training | Stratified 3-fold CV; **fold 0** used for submission |
-| Image size | 224×224 |
-| Fold 0 val accuracy | **100%** (see `outputs/classification_report.txt`) |
-| Test predictions | `submissions/submission.csv` (17,400 rows) |
+**Forman CS Club · AI Hackathon 2026**
 
-**Notebook:** [`notebooks/the-innovators.ipynb`](notebooks/the-innovators.ipynb)  
-**Checkpoint:** [`models/convnext_tiny_fb_in22k_ft_in1k_fold0_best.pth`](models/convnext_tiny_fb_in22k_ft_in1k_fold0_best.pth) (~111 MB, Git LFS)
+Live demo for judges: **open this Space in your browser**, allow webcam, and try signing.
 
-### Submit to Kaggle
+## Judge link (after Space is running)
 
-Upload `submissions/submission.csv` to the competition page (max 5/day).
+Your public URL will look like:
 
----
+**https://huggingface.co/spaces/zk-007/the-innovators**
 
-## Phase 2 — Live demo (this repo)
+(Replace `zk-007` with your Hugging Face username if different.)
 
-Matches hackathon guide requirements:
+## How to use (30 seconds)
 
-| Feature | Implementation |
-|---------|----------------|
-| **Live webcam demo** | Real-time camera → model (no pre-recorded video) |
-| **Word spelling** | Hold a letter ~1.2s to commit; `space` / `del` signs work |
-| **Two-way bridge** | Tab: hearing user types text ↔ deaf user spells via webcam |
+1. Open the Space link → wait for **Running** (first load may take 2–3 min).
+2. Tab **Live webcam + spelling** → allow camera.
+3. Plain wall behind you, one hand in frame.
+4. Copy poses from **How to sign** tab (`ALL_CLASSES_GRID.png`).
+5. Hold each letter ~1 second to spell (e.g. **B → E → E** for BEE).
+6. Best letters: **B, E, F, K, M, N, W, Y**.
 
-### Run locally
+## Project links
+
+- GitHub: [github.com/zk-007/the_innovators](https://github.com/zk-007/the_innovators)
+- Kaggle: ConvNeXt Tiny, fold-0, ~61% hidden test accuracy
+
+## Team
+
+**The Innovators** — Phase 1 classifier + Phase 2 live spelling interface.
+
+## Deploy this Space (owner only)
+
+Full steps: [docs/DEPLOY_FOR_JUDGES.md](docs/DEPLOY_FOR_JUDGES.md)
 
 ```bash
-cd the_innovators
-python -m venv .venv
-.venv\Scripts\activate          # Windows
-# source .venv/bin/activate     # Mac/Linux
+huggingface-cli login
+python scripts/upload_weights_to_hf.py --repo-id zk-007/the-innovators
+```
+
+Then create Space from GitHub repo at [huggingface.co/new-space](https://huggingface.co/new-space).
+
+## Run locally
+
+```bash
 pip install -r requirements.txt
 python run_demo.py
 ```
-
-Open **http://127.0.0.1:7860** and allow camera access.
-
-### Public URL (deployment bonus +5%)
-
-```bash
-python run_demo.py --share
-```
-
-Gradio prints a public `*.gradio.live` link — use this for judges on Tuesday.
-
----
-
-## Project structure
-
-```
-the_innovators/
-├── app/
-│   ├── app.py          # Gradio UI
-│   ├── model.py        # Checkpoint loader + inference
-│   ├── spelling.py     # Hold-to-commit word builder
-│   ├── transforms.py   # Same eval transforms as training
-│   └── config.py
-├── models/             # fold 0 checkpoint (Git LFS)
-├── notebooks/          # Kaggle training notebook
-├── submissions/        # submission.csv
-├── outputs/            # metrics & reports
-├── run_demo.py
-├── requirements.txt
-└── README.md
-```
-
----
-
-## Model details (for presentation)
-
-1. **Input:** RGB hand image (webcam frame or 200×200 dataset image).
-2. **Preprocessing:** Resize 224, ImageNet normalize (same as validation in notebook).
-3. **Backbone:** ConvNeXt Tiny (transfer learning from ImageNet-22k → ImageNet-1k).
-4. **Head:** 29-way softmax classifier.
-5. **Demo smoothing:** Majority vote over last 5 frames + confidence threshold.
-
-### What we tried
-
-- 3-fold training config in notebook (`strong_3fold`); submitted **fold 0** checkpoint within time limit.
-- Heavy augmentations (random crop, rotation, color jitter) for generalization.
-
-### Next steps
-
-- Ensemble folds 1–2 for higher Kaggle LB.
-- MediaPipe hand crop before classification for messier backgrounds.
-- Fine-tune on user-specific lighting via short calibration session.
-
----
-
-## Tuesday checklist (Top 10)
-
-- [ ] GitHub repo public with this README
-- [ ] `python run_demo.py --share` for live judge URL
-- [ ] 5 min presentation: model → live demo → failures → future work
-- [ ] `submissions/submission.csv` submitted before Monday 12:00 PM
-
----
-
-## License
-
-Hackathon project — Forman Christian College, AI Hackathon 2026.

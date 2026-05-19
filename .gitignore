@@ -15,6 +15,8 @@ submission (1)*.csv
 the-innovators (1).ipynb
 Hackathon_Guide*.pdf
 silent_gap_kaggle_outputs/
+dataset/
+*.zip
 
 # keep organized copies under repo paths only
 !.gitkeep
